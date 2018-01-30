@@ -8,6 +8,7 @@ var methodOverride = require('method-override');
 
 var Salesforce = require('./models/salesforces');
 var sfController = require('./controllers/salesforces_repository');
+var userMdl = require('./middlewares/authorization');
 
 var app = express();
 
@@ -34,14 +35,15 @@ app.get("", (req, res)=>{
 });
 
 
-
+//login
+routerSalesforces.route('/login').post(userMdl.createToken);
 
 //Salesforces Routes
 /*
 routerSalesforces.get("/", (req, res)=>{ 
     res.status(200).send({ message : "Welcome to the SalesForces API"});
 });*/
-routerSalesforces.route('/').get(sfController.findAllSalesforces)
+routerSalesforces.route('/').get(userMdl.verifyToken,sfController.findAllSalesforces)
 routerSalesforces.route('/:id').get(sfController.findSalesforcebyId);
 routerSalesforces.route('/').post(sfController.addSalesforce);
 routerSalesforces.route("/name/:name").get(sfController.findSalesforcebyName);
