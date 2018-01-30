@@ -1,0 +1,4 @@
+const parametes = {
+    token : "compania"
+    
+}
